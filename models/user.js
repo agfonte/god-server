@@ -11,6 +11,9 @@ const User = new Schema({
     },
     stats: {
         type: Object
+    },
+    games: {
+        type: Object
     }
 });
 

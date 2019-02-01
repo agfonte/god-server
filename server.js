@@ -26,6 +26,7 @@ app.use(express.json())
 app.use(express.static(path.join(__dirname, "client/public")));
 
 app.use("/api", routes);
+
 app.listen(app.get('port'), () => {
     console.log(`App listening on port ${app.get('port')}!`);
 });
