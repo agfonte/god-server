@@ -30,8 +30,8 @@ router.post("/users", async (req, res) => {
         "status": "OK"
     })
 })
+
 router.put("/users", async (req, res) => {
-    console.log(req.body)
     let id = req.body.id;
     let win = req.body.win;
     let lose = req.body.lose;
@@ -44,26 +44,24 @@ router.put("/users", async (req, res) => {
                 "reason": "No such user"
             });
         };
-        let stats = user.stats;
         if (win > lose) {
-            stats["win"]++;
-            user.set({
-                stats
-            });
+            user.stats.win++;
         } else {
-            stats["lose"]++;
-            user.set({
-                stats
-            });
+            user.stats.lose++;
         }
         if (against) {
-            let games = user.games
-            games.push({
+            user.games.push({
                 against,
                 win,
                 lose
             })
         }
+        console.log(user);
+        user.save();
+        user.save((err) => {
+            console.log(user)
+            res.send(user);
+        });
     }).catch((err) => console.log(err))
 })
 
