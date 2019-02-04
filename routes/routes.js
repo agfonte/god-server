@@ -30,39 +30,38 @@ router.post("/users", async (req, res) => {
         "status": "OK"
     })
 })
-
 router.put("/users", async (req, res) => {
-    let id = req.body.id;
+    let name = req.body.name;
     let win = req.body.win;
     let lose = req.body.lose;
     let against = req.body.against;
-    await User.findById(id, (err, user) => {
-        if (err || user === null) {
-            console.log(err);
-            res.send({
-                "status": "Fail",
-                "reason": "No such user"
-            });
-        };
-        if (win > lose) {
-            user.stats.win++;
-        } else {
-            user.stats.lose++;
+    let user = await User.findOne({
+        user: req.body.name
+    })
+    let stats = user.stats;
+    let games = user.games;
+    console.log(user, user.stats)
+    if (win > lose) {
+        stats.win++
+    } else {
+        stats.lose++
+    }
+    games.push({
+        against,
+        win,
+        lose
+    })
+    await User.updateOne({
+        user: name
+    }, {
+        $set: {
+            stats,
+            games
         }
-        if (against) {
-            user.games.push({
-                against,
-                win,
-                lose
-            })
-        }
-        console.log(user);
-        user.save();
-        user.save((err) => {
-            console.log(user)
-            res.send(user);
-        });
-    }).catch((err) => console.log(err))
+    }, console.log)
+    return res.send({
+        status: "OK"
+    });
 })
 
 router.delete("/users", async (req, res) => {
