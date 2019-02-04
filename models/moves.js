@@ -7,7 +7,6 @@ const {
 const Moves = new Schema({
     move: {
         type: Array,
-        required: true
     }
 });
 
